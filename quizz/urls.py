@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from quizz.quiz_app import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index),
+    path('perguntas/<int:indice>', views.perguntas),
+    path('classificacao', views.classificacao),
 ]
+
