@@ -1,3 +1,9 @@
 from django.contrib import admin
+from django.db import models
 
-# Register your models here.
+from quizz.quiz_app.models import Pergunta
+
+
+@admin.register(Pergunta)
+class PerguntaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'enunciado', 'disponivel']
