@@ -13,3 +13,7 @@ class Pergunta(models.Model):
         ],
     )
 
+class Aluno(models.Model):
+    nome = models.CharField(max_length=64)
+    email = models.EmailField(unique=True)
+    criacao = models.DateTimeField(auto_now_add=True)
