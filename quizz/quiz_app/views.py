@@ -16,7 +16,11 @@ def verificar_se_aluno_existe_no_bd(request):
         return aluno
 
 def validar_formulario_aluno(request):
-    # Validar formulário
+    '''Validar formulário
+
+    :param request:
+    :return: redirect('/perguntas/1') or render for index
+    '''
     form = AlunoForm(request.POST)
     if form.is_valid():
         # salvar aluno no BD e redirecionar para o quiz
@@ -42,8 +46,13 @@ def index(request):
 
 def perguntas(request, indice: int):
     aluno_id = request.session['aluno_id']
-
     pergunta = Pergunta.objects.filter(disponivel=True).order_by('id')[indice - 1]
+
+    if request.method == 'POST':
+        alternativa_escolhida = int(request.POST['alternativa'])
+
+        if alternativa_escolhida - 1 == pergunta.alternativa_correta:
+            return redirect(f'/perguntas/{ indice + 1 }')
 
     contexto = {
         'indice': indice,
