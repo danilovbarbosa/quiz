@@ -43,34 +43,29 @@ def index(request):
 
     return render(request, 'quiz_app/index.html')
 
-def verificar_proxima_questao(request, pergunta, indice, contexto):
-    alternativa_escolhida = int(request.POST['alternativa'])
-
-    if alternativa_escolhida - 1 == pergunta.alternativa_correta:
-        return redirect(f'/perguntas/{indice + 1}')
-
-    contexto['alternativa_escolhida'] = alternativa_escolhida
-
 def perguntas(request, indice: int):
     aluno_id = request.session['aluno_id']
-    pergunta = Pergunta.objects.filter(disponivel=True).order_by('id')[indice - 1]
+    try:
+        pergunta = Pergunta.objects.filter(disponivel=True).order_by('id')[indice - 1]
 
-    contexto = {
-        'indice': indice,
-        'pergunta': pergunta,
-    }
+    except IndexError:
+        return redirect('/classificacao')
 
-    if request.method == 'POST':
-        # verificar_proxima_questao(request, pergunta, indice, contexto)
-        alternativa_escolhida = int(request.POST['alternativa'])
+    else:
+        contexto = {
+            'indice': indice,
+            'pergunta': pergunta,
+        }
 
-        if alternativa_escolhida - 1 == pergunta.alternativa_correta:
-            return redirect(f'/perguntas/{indice + 1}')
+        if request.method == 'POST':
+            alternativa_escolhida = int(request.POST['alternativa'])
 
-        contexto['alternativa_escolhida'] = alternativa_escolhida
+            if alternativa_escolhida - 1 == pergunta.alternativa_correta:
+                return redirect(f'/perguntas/{indice + 1}')
 
-    return render(request, 'quiz_app/perguntas.html', contexto)
+            contexto['alternativa_escolhida'] = alternativa_escolhida
 
+        return render(request, 'quiz_app/perguntas.html', contexto)
 
 def classificacao(request):
     return render(request, 'quiz_app/classificacao.html')
