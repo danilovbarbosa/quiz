@@ -27,7 +27,7 @@
                             <div class="choice-container">
                                 <input type="hidden"  name="alternativa" value="{{ forloop.counter }}">
                                 <button type="submit" class="choice-prefix"> {% cycle 'A' 'B' 'C' 'D' %}</button>
-                                <button type="submit" class="choice-text"> {{ opcao }} </button>
+                                <button type="submit" class="choice-text {% if forloop.counter == alternativa_escolhida %} incorrect {% endif %}"> {{ opcao }} </button>
                             </div>
                         </form>
                     {% endfor %}

@@ -43,21 +43,32 @@ def index(request):
 
     return render(request, 'quiz_app/index.html')
 
+def verificar_proxima_questao(request, pergunta, indice, contexto):
+    alternativa_escolhida = int(request.POST['alternativa'])
+
+    if alternativa_escolhida - 1 == pergunta.alternativa_correta:
+        return redirect(f'/perguntas/{indice + 1}')
+
+    contexto['alternativa_escolhida'] = alternativa_escolhida
 
 def perguntas(request, indice: int):
     aluno_id = request.session['aluno_id']
     pergunta = Pergunta.objects.filter(disponivel=True).order_by('id')[indice - 1]
 
-    if request.method == 'POST':
-        alternativa_escolhida = int(request.POST['alternativa'])
-
-        if alternativa_escolhida - 1 == pergunta.alternativa_correta:
-            return redirect(f'/perguntas/{ indice + 1 }')
-
     contexto = {
         'indice': indice,
         'pergunta': pergunta,
     }
+
+    if request.method == 'POST':
+        # verificar_proxima_questao(request, pergunta, indice, contexto)
+        alternativa_escolhida = int(request.POST['alternativa'])
+
+        if alternativa_escolhida - 1 == pergunta.alternativa_correta:
+            return redirect(f'/perguntas/{indice + 1}')
+
+        contexto['alternativa_escolhida'] = alternativa_escolhida
+
     return render(request, 'quiz_app/perguntas.html', contexto)
 
 
