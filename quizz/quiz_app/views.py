@@ -88,12 +88,13 @@ def classificacao(request):
     aluno_com_pontuacao_maior = Resposta.objects.values('aluno').annotate(Sum('pontos')).filter(
         pontos__sum__gt=pontos_do_aluno).count()
 
-    primeiros_cinco_alunos = Resposta.objects.values('aluno', 'aluno__nome').annotate(Sum('pontos')).filter(
-        pontos__sum__gt=pontos_do_aluno).count()
+    primeiros_cinco_alunos = Resposta.objects.values('aluno', 'aluno__nome').annotate(
+        Sum('pontos')).order_by('-pontos__sum')[0:5]
 
     contexto = {
         'pontos': pontos_do_aluno,
         'posicao': aluno_com_pontuacao_maior + 1,
+        'primeiros_cinco_alunos': primeiros_cinco_alunos,
     }
 
     return render(request, 'quiz_app/classificacao.html', contexto)
