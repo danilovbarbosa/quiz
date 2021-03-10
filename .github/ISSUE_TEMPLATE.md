@@ -15,9 +15,3 @@
    - Versão:
    - Plataforma:
    - Subsistema: 
-Mais sobre o texto originalÉ necessário fornecer o texto original para ver mais informações sobre a tradução
-Enviar feedback
-Painéis laterais
-Histórico
-Salvas
-Contribuir
